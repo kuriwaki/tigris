@@ -5,7 +5,8 @@ Version: 0.9.4
 Date: 2020-04-01
 Authors@R: c(
       person(given="Kyle", family="Walker", email="kyle.walker@tcu.edu", role=c("aut", "cre")),
-      person(given="Bob", family="Rudis", email="bob@rudis.net", role="ctb")
+      person(given="Bob", family="Rudis", email="bob@rudis.net", role="ctb"),
+      person(given="Shiro", family="Kuriwaki", email="shirokuriwaki@gmail.com", role="ctb")
     )
 URL: https://github.com/walkerke/tigris
 BugReports: https://github.com/walkerke/tigris/issues
