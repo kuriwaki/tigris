@@ -48,9 +48,11 @@ congressional_districts <- function(cb = FALSE, resolution = '500k', year = NULL
     congress <- "113"
   } else if (year %in% 2011:2012) {
     congress <- "112"
+  } else if (year %in% 2010) {
+    congress <- "111"
   }
 
-  if (year < 2011) {
+  if ((year < 2011 & cb == FALSE) | (year < 2010 & cb == TRUE)) {
 
     fname <- as.character(match.call())[[1]]
 
@@ -68,9 +70,30 @@ congressional_districts <- function(cb = FALSE, resolution = '500k', year = NULL
   cyear <- as.character(year)
 
   if (cb == TRUE) {
+    if (year == 2011) {
+      warning("GENZ2011 not available so loading GENZ2010 instead.")
+      year <- 2010
+    }
 
+    # main URL form
     url <- sprintf("https://www2.census.gov/geo/tiger/GENZ%s/shp/cb_%s_us_cd%s_%s.zip",
                    cyear, cyear, congress, resolution)
+
+    # year by year exceptions
+    if (year == 2010) {
+      # only possible files are: https://www2.census.gov/geo/tiger/GENZ2010/gz_2010_us_500_11_20m.zip
+      # and 20m version. 500 stands for State+CD. See https://www2.census.gov/geo/tiger/GENZ2010/ReadMe.pdf
+      url <- gsub("/cb_", "/gz_", url)
+      url <- gsub(paste0("cd111_", resolution,".zip"), "500_11_20m.zip", url)
+      url <- gsub("shp/", "", url)
+    }
+
+    if (year == 2012) {
+      # only one file: https://www2.census.gov/geo/tiger/GENZ2012/cd/cb_rd13_us_cd113_500k.zip
+      url <- gsub("cb_2012_us", "cb_rd13_us", url)
+      url <- gsub(paste0("cd112_", resolution,".zip"), "cd113_500k.zip", url)
+      url <- gsub("shp/", "cd/", url)
+    }
 
     if (year == 2013) url <- gsub("shp/", "", url)
 
